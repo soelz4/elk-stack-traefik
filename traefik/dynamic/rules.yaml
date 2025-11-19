@@ -1,0 +1,14 @@
+http:
+  routers:
+    kafka-ui:
+      entryPoints:
+        - traefik
+      service: kafka-ui
+      rule: "PathPrefix(`/kafka`)"
+
+  services:
+    kafka-ui:
+      loadBalancer:
+        servers:
+          - url: "http://kafka-ui:8080"
+        passHostHeader: true

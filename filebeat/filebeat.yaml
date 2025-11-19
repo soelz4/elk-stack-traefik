@@ -1,0 +1,20 @@
+filebeat.modules:
+  - module: postgresql
+    log:
+      enabled: true
+      var.paths:
+        # - /var/log/postgresql/postgresql-*.log
+        - /var/lib/pgsql/data/log/postgresql-*.log
+
+processors:
+  - add_fields:
+      target: ''
+      fields:
+        source_type: postgresql
+
+output.kafka:
+  hosts: ["kafka:9092"]
+  topic: "pg-logs"
+  required_acks: 1
+  compression: gzip
+  max_message_bytes: 1000000
