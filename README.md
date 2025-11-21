@@ -46,7 +46,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
-      - pgsql-data:/var/lib/postgresql/data
+      - /var/lib/pgsql/data:/var/lib/postgresql/data
   traefik:
     image: traefik:v3.4
     container_name: traefik
@@ -74,7 +74,7 @@ services:
     volumes:
       - ./filebeat/filebeat.yaml:/usr/share/filebeat/filebeat.yml:ro
       # - ./filebeat/modules.d:/usr/share/filebeat/modules.d:ro
-      - pgsql-data:/var/lib/pgsql/data/log:ro
+      - /var/lib/pgsql/data/log:/var/lib/pgsql/data/log:ro
   kafka:
     image: apache/kafka:4.1.0
     container_name: kafka
@@ -187,7 +187,6 @@ networks:
     external: true
 
 volumes:
-  pgsql-data:
   es-data:
   kafka-data:
 ```
@@ -439,5 +438,20 @@ The `log-generator` directory contains a Python script that simulates real-world
 
 ```bash
 cd log-generator
+```
+
+```bash
+python -m venv .venv
+```
+
+```bash
+source .venv/bin/activate
+```
+
+```bash
+pip install -r requirements.txt
+```
+
+```bash
 python data_generator.py
 ```
