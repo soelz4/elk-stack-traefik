@@ -1,3 +1,4 @@
 certs
 .env
+.venv
 docker-compose.yaml.bk.*
