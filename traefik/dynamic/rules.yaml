@@ -6,25 +6,36 @@ http:
       entryPoints:
         - websecure
       tls: {}
+      middlewares:
+        - dashboard
     kafka-ui:
       entryPoints:
         - websecure
       service: kafka-ui
       rule: "PathPrefix(`/kafka`)"
+      tls: {}
     kibana:
       entryPoints:
-        - web
+        - websecure
       service: kibana
       rule: "PathPrefix(`/kibana`)"
+      tls: {}
+
+  middlewares:
+    dashboard:
+      redirectRegex:
+        regex: "^(https?://[^/]+/dashboard)$"
+        replacement: "${1}/"
+        permanent: true
 
   services:
     kafka-ui:
       loadBalancer:
         servers:
           - url: "http://kafka-ui:8080"
-        passHostHeader: false
+        passHostHeader: true
     kibana:
       loadBalancer:
         servers:
           - url: "http://kibana:5601"
-        passHostHeader: false
+        passHostHeader: true
