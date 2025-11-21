@@ -3,6 +3,8 @@ services:
     image: postgres:17-alpine3.22
     container_name: postgres
     restart: always
+    ports:
+      - "5432:5432"
     networks:
       - elk
     healthcheck:
