@@ -12,6 +12,24 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    command:
+      [
+        "postgres",
+        "-c",
+        "log_destination=stderr",
+        "-c",
+        "logging_collector=on",
+        "-c",
+        "log_directory=log",
+        "-c",
+        "log_filename=postgresql-%Y-%m-%d.log",
+        "-c",
+        "log_statement=all",
+        "-c",
+        "log_connections=on",
+        "-c",
+        "log_disconnections=on",
+      ]
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -35,6 +53,7 @@ services:
   filebeat:
     image: elastic/filebeat:8.19.7
     container_name: filebeat
+    user: root
     depends_on:
       postgres:
         condition: service_healthy

@@ -1,5 +1,7 @@
 # ELK Stack with Treafik
 
+> **⚠️ Application Note:** This ELK stack is configured to process PostgreSQL logs, but the pipeline is flexible enough to handle any log type. The provided data generator simulates PostgreSQL activity, but you can adapt the Filebeat configuration to collect logs from other applications like Nginx, Apache, Node.js, or custom applications.
+
 The ELK Stack is a powerful suite for centralized logging and data analysis. **Filebeat** acts as a lightweight shipper, collecting logs from your servers and applications. It forwards these logs to a **Kafka** cluster, which provides a resilient message buffer for handling high-throughput data. **Logstash** then consumes the logs from Kafka, parsing and enriching them into a structured format. The processed data is indexed and stored in **ElasticSearch**, a highly scalable search and analytics engine. Finally, **Kibana** provides a web-based visualization interface to explore the data and create insightful dashboards. In this architecture, **Traefik** is used as a modern reverse proxy and API gateway. It efficiently routes external traffic to the appropriate services, such as Kibana, while also handling SSL/TLS termination. This creates a robust, scalable, and observable pipeline for managing log data from source to insight.
 
 ## Overview
@@ -41,6 +43,24 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    command:
+      [
+        "postgres",
+        "-c",
+        "log_destination=stderr",
+        "-c",
+        "logging_collector=on",
+        "-c",
+        "log_directory=log",
+        "-c",
+        "log_filename=postgresql-%Y-%m-%d.log",
+        "-c",
+        "log_statement=all",
+        "-c",
+        "log_connections=on",
+        "-c",
+        "log_disconnections=on",
+      ]
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -64,6 +84,7 @@ services:
   filebeat:
     image: elastic/filebeat:8.19.7
     container_name: filebeat
+    user: root
     depends_on:
       postgres:
         condition: service_healthy
@@ -436,6 +457,8 @@ The `log-generator` directory contains a Python script that simulates real-world
 
 ### 🚀 Usage
 
+this Python Script just INSERT some randome name in `users` Table.
+
 ```bash
 cd log-generator
 ```
@@ -453,5 +476,20 @@ pip install -r requirements.txt
 ```
 
 ```bash
-python data_generator.py
+python src/main.py
 ```
+
+## Examples
+
+access to `traefik` dashboard with `https://localhost/dashboard/`
+
+![Traefik Dashboard](./png/traefik.png "Traefik Dashboard")
+
+access to `traefik` dashboard with `https://localhost/kafka`
+
+![Kafka-UI](./png/kafka-ui-1.png "Kafka-UI")
+![Kafka-UI](./png/kafka-ui-2.png "Kafka-UI")
+
+access to `traefik` dashboard with `https://localhost/kibana`
+
+![Kibana](./png/kibana.png "Kibana")
