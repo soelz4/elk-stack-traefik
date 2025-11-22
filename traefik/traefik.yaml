@@ -5,11 +5,16 @@ log:
   level: DEBUG
 api:
   dashboard: true
-  insecure: true
+  # insecure: true
 entryPoints:
   web:
     address: :80
-    reusePort: true
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
   websecure:
     address: :443
 providers:

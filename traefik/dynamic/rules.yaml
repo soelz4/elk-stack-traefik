@@ -1,14 +1,41 @@
 http:
   routers:
+    traefik-dashboard:
+      rule: "PathPrefix(`/api`) || PathPrefix(`/dashboard`)"
+      service: api@internal
+      entryPoints:
+        - websecure
+      tls: {}
+      middlewares:
+        - dashboard
     kafka-ui:
       entryPoints:
-        - traefik
+        - websecure
       service: kafka-ui
       rule: "PathPrefix(`/kafka`)"
+      tls: {}
+    kibana:
+      entryPoints:
+        - websecure
+      service: kibana
+      rule: "PathPrefix(`/kibana`)"
+      tls: {}
+
+  middlewares:
+    dashboard:
+      redirectRegex:
+        regex: "^(https?://[^/]+/dashboard)$"
+        replacement: "${1}/"
+        permanent: true
 
   services:
     kafka-ui:
       loadBalancer:
         servers:
           - url: "http://kafka-ui:8080"
+        passHostHeader: true
+    kibana:
+      loadBalancer:
+        servers:
+          - url: "http://kibana:5601"
         passHostHeader: true
