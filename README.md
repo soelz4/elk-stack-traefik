@@ -218,7 +218,7 @@ volumes:
 
 Traefik serves as the modern reverse proxy and API gateway for the entire ELK stack infrastructure, handling SSL termination, routing, and service discovery.
 
-### 🎯 Configuration Overview
+### Configuration Overview
 
 **Global Settings:**
 
@@ -265,7 +265,7 @@ providers:
     watch: true
 ```
 
-### 🔐 Security & Access Control
+### Security & Access Control
 
 **TLS Configuration:**
 
@@ -276,13 +276,13 @@ tls:
     - keyFile: /certs/local.key
 ```
 
-### 🔐 Protected Routes
+### Protected Routes
 
 - **Traefik Dashboard**: `/dashboard` paths with redirect middleware
 - **Kibana**: Secure access via `/kibana` path
 - **Kafka UI**: Management interface at `/kafka` path
 
-### 🛣️ Routing Rules
+### Routing Rules
 
 | Service           | Path         | EntryPoint | TLS | Description                  |
 | ----------------- | ------------ | ---------- | --- | ---------------------------- |
@@ -336,7 +336,7 @@ http:
         passHostHeader: true
 ```
 
-### 🔄 Middleware Features
+### Middleware Features
 
 **Dashboard Redirect Middleware:**
 
@@ -344,7 +344,7 @@ http:
 - Permanent redirect for clean URL structure
 - Enhanced user experience for the management interface
 
-### 🌐 Service Discovery
+### Service Discovery
 
 **Docker Integration:**
 
@@ -444,18 +444,18 @@ POSTGRES_DB=<postgres-db>
 docker compose up -d
 ```
 
-## 📊 Test Data Generator
+## Test Data Generator
 
 The `log-generator` directory contains a Python script that simulates real-world application activity by continuously generating sample user data and inserting it into PostgreSQL. This creates a consistent stream of log data for testing the ELK stack pipeline.
 
-### 🎯 Purpose
+### Purpose
 
 - Generates continuous test data for ELK stack validation
 - Simulates user activity in a PostgreSQL database
 - Provides a reliable data source for pipeline monitoring
 - Creates sample logs for Kibana visualization testing
 
-### 🚀 Usage
+### Usage
 
 this Python Script just INSERT some randome name in `users` Table.
 
@@ -493,3 +493,5 @@ access to `traefik` dashboard with `https://localhost/kafka`
 access to `traefik` dashboard with `https://localhost/kibana`
 
 ![Kibana](./png/kibana.png "Kibana")
+
+<br>![cat](https://github-production-user-asset-6210df.s3.amazonaws.com/62666332/253642655-0438a9e1-d47d-4570-873c-5ddd59f46e9e.svg)</br>
